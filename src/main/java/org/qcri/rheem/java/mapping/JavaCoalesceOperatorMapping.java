@@ -1,18 +1,22 @@
 package org.qcri.rheem.java.mapping;
 
-import org.qcri.rheem.basic.operators.DistinctOperator;
+import org.qcri.rheem.basic.operators.CoalesceOperator;
+import org.qcri.rheem.basic.operators.MapOperator;
+import org.qcri.rheem.basic.operators.TextFileSource;
 import org.qcri.rheem.core.mapping.*;
 import org.qcri.rheem.core.plan.Operator;
-import org.qcri.rheem.java.operators.JavaDistinctOperator;
+import org.qcri.rheem.java.operators.JavaCoalesceOperator;
+import org.qcri.rheem.java.operators.JavaMapOperator;
+import org.qcri.rheem.java.operators.JavaTextFileSource;
 import org.qcri.rheem.java.plugin.JavaPlatform;
 
 import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Mapping from {@link DistinctOperator} to {@link JavaDistinctOperator}.
+ * Mapping from {@link TextFileSource} to {@link JavaTextFileSource}.
  */
-public class DistinctToJavaDistinctMapping implements Mapping {
+public class JavaCoalesceOperatorMapping implements Mapping {
 
     @Override
     public Collection<PlanTransformation> getTransformations() {
@@ -22,7 +26,7 @@ public class DistinctToJavaDistinctMapping implements Mapping {
 
     private SubplanPattern createSubplanPattern() {
         final OperatorPattern operatorPattern = new OperatorPattern(
-                "distinct", new DistinctOperator<>(null), false);
+                "coalesce", new CoalesceOperator<>(null), false);
         return SubplanPattern.createSingleton(operatorPattern);
     }
 
@@ -30,8 +34,8 @@ public class DistinctToJavaDistinctMapping implements Mapping {
 
         @Override
         protected Operator translate(SubplanMatch subplanMatch, int epoch) {
-            final DistinctOperator<?> originalOperator = (DistinctOperator<?>) subplanMatch.getMatch("distinct").getOperator();
-            return new JavaDistinctOperator<>(originalOperator.getInputType()).at(epoch);
+            final CoalesceOperator<?> originalOperator = (CoalesceOperator<?>) subplanMatch.getMatch("coalesce").getOperator();
+            return new JavaCoalesceOperator<>(originalOperator.getOutput().getType()).at(epoch);
         }
     }
 }
