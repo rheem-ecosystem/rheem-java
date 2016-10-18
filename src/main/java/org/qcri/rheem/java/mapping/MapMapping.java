@@ -6,7 +6,7 @@ import org.qcri.rheem.core.mapping.*;
 import org.qcri.rheem.core.types.DataSetType;
 import org.qcri.rheem.java.operators.JavaMapOperator;
 import org.qcri.rheem.java.operators.JavaTextFileSource;
-import org.qcri.rheem.java.JavaPlatform;
+import org.qcri.rheem.java.platform.JavaPlatform;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -15,17 +15,15 @@ import java.util.Collections;
  * Mapping from {@link TextFileSource} to {@link JavaTextFileSource}.
  */
 @SuppressWarnings("unchecked")
-public class MapOperatorToJavaMapOperatorMapping implements Mapping {
+public class MapMapping implements Mapping {
 
     @Override
     public Collection<PlanTransformation> getTransformations() {
-        return Collections.singleton(
-                new PlanTransformation(
-                        this.createSubplanPattern(),
-                        this.createReplacementSubplanFactory(),
-                        JavaPlatform.getInstance()
-                )
-        );
+        return Collections.singleton(new PlanTransformation(
+                this.createSubplanPattern(),
+                this.createReplacementSubplanFactory(),
+                JavaPlatform.getInstance()
+        ));
     }
 
     private SubplanPattern createSubplanPattern() {
@@ -37,11 +35,7 @@ public class MapOperatorToJavaMapOperatorMapping implements Mapping {
 
     private ReplacementSubplanFactory createReplacementSubplanFactory() {
         return new ReplacementSubplanFactory.OfSingleOperators<MapOperator>(
-                (matchedOperator, epoch) -> new JavaMapOperator<>(
-                        matchedOperator.getInputType(),
-                        matchedOperator.getOutputType(),
-                        matchedOperator.getFunctionDescriptor()
-                ).at(epoch)
+                (matchedOperator, epoch) -> new JavaMapOperator<>(matchedOperator).at(epoch)
         );
     }
 }

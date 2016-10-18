@@ -4,7 +4,7 @@ import org.qcri.rheem.basic.operators.FlatMapOperator;
 import org.qcri.rheem.core.mapping.*;
 import org.qcri.rheem.core.types.DataSetType;
 import org.qcri.rheem.java.operators.JavaFlatMapOperator;
-import org.qcri.rheem.java.JavaPlatform;
+import org.qcri.rheem.java.platform.JavaPlatform;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,7 +13,7 @@ import java.util.Collections;
  * Mapping from {@link FlatMapOperator} to {@link JavaFlatMapOperator}.
  */
 @SuppressWarnings("unchecked")
-public class FlatMapToJavaFlatMapMapping implements Mapping {
+public class FlatMapMapping implements Mapping {
 
     @Override
     public Collection<PlanTransformation> getTransformations() {
@@ -34,11 +34,7 @@ public class FlatMapToJavaFlatMapMapping implements Mapping {
 
     private ReplacementSubplanFactory createReplacementSubplanFactory() {
         return new ReplacementSubplanFactory.OfSingleOperators<FlatMapOperator>(
-                (matchedOperator, epoch) -> new JavaFlatMapOperator<>(
-                        matchedOperator.getInputType(),
-                        matchedOperator.getOutputType(),
-                        matchedOperator.getFunctionDescriptor()
-                ).at(epoch)
+                (matchedOperator, epoch) -> new JavaFlatMapOperator<>(matchedOperator).at(epoch)
         );
     }
 }

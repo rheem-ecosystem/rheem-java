@@ -4,7 +4,7 @@ import org.qcri.rheem.basic.operators.CartesianOperator;
 import org.qcri.rheem.core.mapping.*;
 import org.qcri.rheem.core.types.DataSetType;
 import org.qcri.rheem.java.operators.JavaCartesianOperator;
-import org.qcri.rheem.java.JavaPlatform;
+import org.qcri.rheem.java.platform.JavaPlatform;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import java.util.Collections;
 /**
  * Mapping from {@link CartesianOperator} to {@link JavaCartesianOperator}.
  */
-public class CartesianToJavaCartesianMapping implements Mapping {
+public class CartesianMapping implements Mapping {
 
     @Override
     public Collection<PlanTransformation> getTransformations() {
@@ -22,17 +22,14 @@ public class CartesianToJavaCartesianMapping implements Mapping {
     }
 
     private SubplanPattern createSubplanPattern() {
-        final OperatorPattern operatorPattern = new OperatorPattern(
-                "cartesian", new CartesianOperator<>(null, DataSetType.none()), false);
+        final OperatorPattern<CartesianOperator<?, ?>> operatorPattern = new OperatorPattern<>(
+                "cartesian", new CartesianOperator<>(DataSetType.none(), DataSetType.none()), false);
         return SubplanPattern.createSingleton(operatorPattern);
     }
 
     private ReplacementSubplanFactory createReplacementSubplanFactory() {
-        return new ReplacementSubplanFactory.OfSingleOperators<CartesianOperator>(
-                (matchedOperator, epoch) -> new JavaCartesianOperator<>(
-                        matchedOperator.getInputType0(),
-                        matchedOperator.getInputType1()
-                ).at(epoch)
+        return new ReplacementSubplanFactory.OfSingleOperators<CartesianOperator<?, ?>>(
+                (matchedOperator, epoch) -> new JavaCartesianOperator<>(matchedOperator).at(epoch)
         );
     }
 }

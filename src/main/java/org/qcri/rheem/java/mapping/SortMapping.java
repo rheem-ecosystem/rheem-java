@@ -2,10 +2,9 @@ package org.qcri.rheem.java.mapping;
 
 import org.qcri.rheem.basic.operators.SortOperator;
 import org.qcri.rheem.core.mapping.*;
-import org.qcri.rheem.core.plan.rheemplan.Operator;
 import org.qcri.rheem.core.types.DataSetType;
+import org.qcri.rheem.java.platform.JavaPlatform;
 import org.qcri.rheem.java.operators.JavaSortOperator;
-import org.qcri.rheem.java.JavaPlatform;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,12 +12,15 @@ import java.util.Collections;
 /**
  * Mapping from {@link SortOperator} to {@link JavaSortOperator}.
  */
-public class SortToJavaSortMapping implements Mapping {
+public class SortMapping implements Mapping {
 
     @Override
     public Collection<PlanTransformation> getTransformations() {
-        return Collections.singleton(new PlanTransformation(this.createSubplanPattern(), new ReplacementFactory(),
-                JavaPlatform.getInstance()));
+        return Collections.singleton(new PlanTransformation(
+                this.createSubplanPattern(),
+                this.createReplacementSubplanFactory(),
+                JavaPlatform.getInstance()
+        ));
     }
 
     private SubplanPattern createSubplanPattern() {
@@ -27,12 +29,9 @@ public class SortToJavaSortMapping implements Mapping {
         return SubplanPattern.createSingleton(operatorPattern);
     }
 
-    private static class ReplacementFactory extends ReplacementSubplanFactory {
-
-        @Override
-        protected Operator translate(SubplanMatch subplanMatch, int epoch) {
-            final SortOperator<?> originalOperator = (SortOperator<?>) subplanMatch.getMatch("sort").getOperator();
-            return new JavaSortOperator<>(originalOperator.getInputType()).at(epoch);
-        }
+    private ReplacementSubplanFactory createReplacementSubplanFactory() {
+        return new ReplacementSubplanFactory.OfSingleOperators<SortOperator>(
+                (matchedOperator, epoch) -> new JavaSortOperator<>(matchedOperator).at(epoch)
+        );
     }
 }

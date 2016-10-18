@@ -4,7 +4,7 @@ import org.qcri.rheem.basic.operators.GlobalReduceOperator;
 import org.qcri.rheem.core.mapping.*;
 import org.qcri.rheem.core.types.DataSetType;
 import org.qcri.rheem.java.operators.JavaGlobalReduceOperator;
-import org.qcri.rheem.java.JavaPlatform;
+import org.qcri.rheem.java.platform.JavaPlatform;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,17 +13,15 @@ import java.util.Collections;
  * Mapping from {@link GlobalReduceOperator} to {@link JavaGlobalReduceOperator}.
  */
 @SuppressWarnings("unchecked")
-public class JavaGlobalReduceOperatorMapping implements Mapping {
+public class GlobalReduceMapping implements Mapping {
 
     @Override
     public Collection<PlanTransformation> getTransformations() {
-        return Collections.singleton(
-                new PlanTransformation(
-                        this.createSubplanPattern(),
-                        this.createReplacementSubplanFactory(),
-                        JavaPlatform.getInstance()
-                )
-        );
+        return Collections.singleton(new PlanTransformation(
+                this.createSubplanPattern(),
+                this.createReplacementSubplanFactory(),
+                JavaPlatform.getInstance()
+        ));
     }
 
     private SubplanPattern createSubplanPattern() {
@@ -34,10 +32,7 @@ public class JavaGlobalReduceOperatorMapping implements Mapping {
 
     private ReplacementSubplanFactory createReplacementSubplanFactory() {
         return new ReplacementSubplanFactory.OfSingleOperators<GlobalReduceOperator>(
-                (matchedOperator, epoch) -> new JavaGlobalReduceOperator<>(
-                        matchedOperator.getType(),
-                        matchedOperator.getReduceDescriptor()
-                ).at(epoch)
+                (matchedOperator, epoch) -> new JavaGlobalReduceOperator<>(matchedOperator).at(epoch)
         );
     }
 }
