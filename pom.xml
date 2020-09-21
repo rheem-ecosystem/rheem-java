@@ -8,10 +8,9 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>io.rheem</groupId>
     <artifactId>rheem-java</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <groupId>io.rheem</groupId>
-
     <packaging>jar</packaging>
 
     <name>Rheem Platform Java</name>
@@ -43,8 +42,8 @@
     </licenses>
 
     <properties>
-        <java-module-name>io.rheem.java</java-module-name>
-        <rheem.version>1.0.0-SNAPSHOT</rheem.version>
+        <java-module-name>io.rheem.platform.java</java-module-name>
+        <rheem.core.version>1.0.0-SNAPSHOT</rheem.core.version>
     </properties>
 
     <scm>
@@ -62,12 +61,12 @@
         <dependency>
             <groupId>io.rheem</groupId>
             <artifactId>rheem-core</artifactId>
-            <version>${rheem.version}</version>
+            <version>${rheem.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.rheem</groupId>
             <artifactId>rheem-basic</artifactId>
-            <version>${rheem.version}</version>
+            <version>${rheem.core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
