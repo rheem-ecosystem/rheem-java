@@ -1,23 +1,11 @@
-# Rheem Platform "Java Stream"
+# Rheem has been transfer to Apache Incubator and rename as [Wayang](https://wayang.apache.org)
 
-`rheem-java` is the repository, here you can found the implementation of the operators which allow the execution of 
-platform "Java Stream"
+<img src="./logo_rheem.png" style="width:200px"> ==> <img src="./logo_wayang.png" style="width:200px">
 
-## How to compile
+You can find the latest version of the source code [inside the Apache Wayang repository](https://gitbox.apache.org/repos/asf?s=incubator-wayang), where it will continue to be developed.
 
-```bash
-mvn clean compile 
-```
+Please report any bugs to the [Jira issue tracker](https://issues.apache.org/jira/projects/WAYANG) directly.
 
+An archive of the source code before the merge is available [here](../../tree/archive).
 
-## How to create the package
-
-```bash
-mvn clean package
-```
-
-## How to deploy
-
-```bash
-mvn clean deploy -P central
-```
+The repository rheem-java it merge to apache wayang on the folder [wayang-platforms/wayang-java](https://github.com/apache/incubator-wayang/tree/main/wayang-platforms/wayang-java)
